@@ -1,7 +1,7 @@
 # Smart-Mail-AI
 AI-powered SmartMail Assistant that analyzes emails, extracts key information, generates replies, and automates actions like scheduling and notifications using n8n and agentic workflows.
 
-README (Copy-Paste Version)
+
 🚀 SmartMail AI
 SmartMail AI is an automation system that analyzes incoming emails using AI and automatically performs actions like extracting intent, generating replies, and creating Google Calendar events.
 
