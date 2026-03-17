@@ -1,0 +1,152 @@
+{
+  "name": "SmartMail AI",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "smartmail-agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f4d7bd7f-630b-4538-b461-a25622ad2a45",
+      "name": "Webhook",
+      "webhookId": "2921fb1a-8f98-42e4-a190-83cc6d8663d4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "JSON",
+        "body": "={\n  \"model\": \"openai/gpt-3.5-turbo\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze this email and return intent, details, and reply: {{$json.body.email}}\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "57233d4e-6969-472e-9d1d-943a091a95ba",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51b66b03-a9d8-4961-982f-f6cd6c16c13b",
+              "name": "output",
+              "value": "={{$json[\"choices\"][0][\"message\"][\"content\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5cfbff91-a32a-4098-863e-784a645670bb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "navyasaravanan08@gmail.com",
+          "mode": "list",
+          "cachedResultName": "navyasaravanan08@gmail.com"
+        },
+        "additionalFields": {
+          "summary": "Meeting from AI"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7b68a13d-f62e-454e-80c2-9aae6ff90530",
+      "name": "Google calender",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OaxufnTDyEujUlwp",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Google calender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c92f5104-6a22-41ae-a84b-e7f59c05bacf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "030910e2fae39df65591124f37de67a15a89bd51ba583fecd2f8bba965908526"
+  },
+  "id": "kNm36MftgcCWiG2Q",
+  "tags": []
+}
